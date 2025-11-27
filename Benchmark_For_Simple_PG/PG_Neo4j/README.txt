@@ -1,41 +1,77 @@
-1. GO TO : https://ldbcouncil.org/data-sets-surf-repository/snb-interactive-v1-datagen-v100
-2. Download the file : social_network-sfx-CsvBasic-LongDateFormatter.tar.zst (x=0.1 || 0.3||1)
-3. unzip it , you will find two folders static/ and dynamic/
-Le dossier static/ contient les données qui ne changent pas (entités “statiques”) — des choses comme Tag, Place, Organisation. 
+# Importing SNB CSVs into Neo4j
 
-Le dossier dynamic/ contient les relations changeantes / les événements du graphe — knows (relations d’amitié), les messages, commentaires, les liens “hasCreator”, “replyOf” etc.
+This guide explains how to import **LDBC SNB CSV** data into **Neo4j**.
 
-PS : 
--All THE BELOW STEPS ARE AUTOMATED ( run the ps file named automated_import_fromSNB_to_Neo4j)
-- Read IMPORTANT section before you run the ps file
 
-4. select only csv files from both static/ and dynamic/ folders, than :
-5. Préparer Neo4j : crer une DB et placer les CSV dans le dossier import
-6. Créer les contraintes / index  its très important avant l’import !!!
-exemple : 
-CREATE CONSTRAINT person_id IF NOT EXISTS FOR (p:Person) REQUIRE p.id IS UNIQUE;
 
-7.importer les noeuds 
-exemple : 
-USING PERIODIC COMMIT 5000
-LOAD CSV WITH HEADERS FROM 'file:///person_0_0.csv' AS row
-MERGE (p:Person {id: toInteger(row.id)})
-SET p.firstName = row.firstName,
-    p.lastName = row.lastName,
-    p.gender = row.gender,
-    p.birthday = row.birthday,      // si timestamp non-ISO, laisse en string
-    p.city = row.city,
-    p.country = row.country;
+# 1. Download the data
 
-8. Importer les edges 
-exemple :
-USING PERIODIC COMMIT 5000
-LOAD CSV WITH HEADERS FROM 'file:///knows_0_0.csv' AS row
-MATCH (a:Person {id: toInteger(row.person1)}), (b:Person {id: toInteger(row.person2)})
-CREATE (a)-[:KNOWS {creationDate: row.creationDate}]->(b);
+1. Go to:  
+   [https://ldbcouncil.org/data-sets-surf-repository/snb-interactive-v1-datagen-v100](https://ldbcouncil.org/data-sets-surf-repository/snb-interactive-v1-datagen-v100)
 
-/!\  IMPORTANT 
+2. Download the file:  
+   `social_network-sfX-CsvBasic-LongDateFormatter.tar.zst`  
+   *(X = 0.1 | 0.3 | 1)*
 
-before running the ps file, u hafta :
-- install the plugin APOC in your Neo4j DBMS
-- go to dynamic and static folders and change the name of the first and second column in both person_knows_person, comment_replyOf_comment, place_isPartOf_place and tagclass_isSubclassOf_tagclass files ; the first column must be labelName1.id and the second column must be labelName2.id 
+3. Extract the archive. You will find two folders:
+
+## static/
+Contains **static entities** (data that does not change) such as:  
+Tag, Place, Organisation, etc.
+
+## dynamic/
+Contains **dynamic entities and relationships** (graph events), such as:  
+- knows (friendship relations)  
+- messages  
+- comments  
+- hasCreator, replyOf, etc.
+
+---
+
+# NOTES
+
+- All the steps below can be automated by running:  
+  `automated_import_fromSNB_to_Neo4j.ps1`
+- Make sure to read the **IMPORTANT** section before running the script.
+
+---
+
+# 4. Prepare CSV files
+
+1. Select **only CSV files** from both `static/` and `dynamic/` folders.
+
+2. Prepare Neo4j:  
+   - Create a new database  
+   - Place all CSV files into the `import/` folder of your Neo4j database
+
+---
+
+# 5. Create constraints / indexes (mandatory before import)
+
+Example:
+
+
+CREATE CONSTRAINT person_id IF NOT EXISTS
+FOR (p:Person)
+REQUIRE p.id IS UNIQUE;
+
+# 6. Import nodes
+# 7. Import relationships
+
+# Important Notes before running the script
+
+Before executing the automation script:
+
+1. Install the APOC plugin in your Neo4j DBMS.
+
+2. In the static/ and dynamic/ folders, rename the first two columns in these files:
+
+person_knows_person.csv
+
+comment_replyOf_comment.csv
+
+place_isPartOf_place.csv
+
+tagclass_isSubclassOf_tagclass.csv
+
+The first column must be LabelName1.id and the second column must be LabelName2.id.

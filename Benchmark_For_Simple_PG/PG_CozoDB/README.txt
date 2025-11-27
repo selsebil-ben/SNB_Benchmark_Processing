@@ -1,27 +1,78 @@
-#we gonne see how to import SNB CSVs in CozoDB
- first u go to  : https://ldbcouncil.org/data-sets-surf-repository/snb-interactive-v1-datagen-v100
-2. Download the file : social_network-sfx-CsvBasic-LongDateFormatter.tar.zst (x=0.1 || 0.3||1)
-3. unzip it , you will find two folders static/ and dynamic/
-Le dossier static/ contient les données qui ne changent pas (entités “statiques”) — des choses comme Tag, Place, Organisation. 
+# Importing SNB CSVs into CozoDB
 
-Le dossier dynamic/ contient les relations changeantes / les événements du graphe — knows (relations d’amitié), les messages, commentaires, les liens “hasCreator”, “replyOf” etc.
+This guide explains how to import **LDBC SNB CSV** data into **CozoDB**.
 
-then, You hafta clone the below structure in a root folder : 
- 1 data folder : select all the csv files from static and dynamic folder in SNB folder and put them in data folder
 
-2 Scripts folder contains all the scripts to transform csv data into json objects ready to be imported in cozoDB ( have a look here ^^ : https://docs.cozodb.org/en/latest/nonscript.html)
-3 output_json folder , this is the output directory in with will put the chunks returned by csv_to_json python scripts. it contains also the query_cozo file to run cozo queries, this file must be in the same location as the DB folder (see IMPORTANT section)
 
-3 State folder to save the state of last edge id in every csv file (we have to generate ids because in csv edges don't have ids)
+## 1. Download SNB Data
 
-4 Venv Virtual envirement folder contains the basic packages
-5 Requirements file just for embedded DB
+1. Go to:  
+   **https://ldbcouncil.org/data-sets-surf-repository/snb-interactive-v1-datagen-v100**
 
-6 finally the batch file to be runned 
-/!\  IMPORTANT 
+2. Download the file:  
+   **social_network-sfX-CsvBasic-LongDateFormatter.tar.zst**  
+   where `X ∈ {0.1, 0.3, 1}`.
 
-for every SNB SF, before running the batch file, u hafta :
+3. Unzip the archive. You will find two folders:
 
-- go to scripts/import_to_cozo.py and run the already commented code ( it's a code to create the schema of a simple PG in cozoDB and to create the indexes) then you comment it again and let only import code discommented. once you runned the client you get a new folder DB in the same directory (scripts folder)
-- go to state/ edge-counter.txt , the text file must be empty at the begining
+### `static/`
+Contains stable data that does not change (static entities) — such as **Tag**, **Place**, **Organisation**, etc.
+
+### `dynamic/`
+Contains graph events / evolving relationships — **knows**, **messages**, **comments**, **hasCreator**, **replyOf**, etc.
+
+
+
+## 2. Project Structure to Reproduce
+
+Create the following folder structure in your project root:
+
+project-root/
+├── data/
+├── scripts/
+├── output_json/
+├── state/
+├── venv/
+├── requirements.txt
+└── run.bat
+
+
+### `data/`
+Select all CSV files from both `static/` and `dynamic/` and place them here.
+
+### `scripts/`
+Contains all scripts used to transform CSV data into **JSON objects** ready for import into CozoDB.  
+Reference documentation: https://docs.cozodb.org/en/latest/nonscript.html
+
+### `output_json/`
+Directory where chunks produced by the CSV-to-JSON Python scripts are stored.  
+This folder also contains the **query_cozo file**, which must be located in the **same directory as the `DB/` folder** (see *Important* section below).
+
+### `state/`
+Stores the state of the last edge ID for each CSV file.  
+(We must generate edge IDs manually because SNB CSV edges do not include IDs.)
+
+
+### `requirements.txt`
+Dependency list (for embedded CozoDB use).
+
+### `run.bat`
+Batch file used to run the full import pipeline.
+
+---
+
+## IMPORTANT: Before Running the Batch File
+
+For every SNB scale factor:
+
+### 1. Initialize the CozoDB schema
+- Open: `scripts/import_to_cozo.py`
+- Temporarily **uncomment** the schema-creation code (creates a simple property graph schema + indexes).
+- Once you run the script, a new `DB` folder will be created in the same directory (`scripts/`).
+- Then **comment the schema code again**, leaving only the import code active.
+
+### 2. Reset edge counters
+- Open: `state/edge-counter.txt`
+- Ensure the file is **empty** before starting the import process.
+
 
