@@ -7,7 +7,7 @@
 #How to find import folder path ? go to neo4j, click on ⋮ , choose open folder , choose Import, it open the import folder in his location :) 
 #How to find cypher-shell.bat path ? when you reach import folder , go to previous folder, open bin folder, and your bat file is there ^^
 $neo4j_user = "neo4j"
-$neo4j_pass = "salsaneo4j"  
+$neo4j_pass = "yourpassword"  
 $neo4j_import_dir = "C:\Users\Selsebil\.Neo4jDesktop\relate-data\dbmss\dbms-73a0a32c-4a50-4ef4-86a5-01f6e855ac48\import"
 $cypher_shell = "C:\Users\Selsebil\.Neo4jDesktop\relate-data\dbmss\dbms-73a0a32c-4a50-4ef4-86a5-01f6e855ac48\bin\cypher-shell.bat"
 $PSScriptRoot="C:\Users\Selsebil\Desktop\EXPv2" #here where u put this script file
