@@ -58,13 +58,15 @@ REQUIRE p.id IS UNIQUE;
 # 6. Import nodes
 # 7. Import relationships
 
-# Important Notes before running the script
+# /!\ Important Notes before running the script
 
 Before executing the automation script:
 
-1. Install the APOC plugin in your Neo4j DBMS.
+1. Read carefully the comments in the script file that guide you to change the paths of each used file.
 
-2. In the static/ and dynamic/ folders, rename the first two columns in these files:
+2. Install the APOC plugin in your Neo4j DBMS.
+
+3. In the static/ and dynamic/ folders, rename the first two columns in these files:
 
 person_knows_person.csv
 
