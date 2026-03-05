@@ -4,7 +4,7 @@ This guide explains how to install **HO-GDB** using a clean **Python 3.11** envi
 
 ---
 
-# 1️⃣ Install Anaconda and Prepare the Environment
+# 1 Install Anaconda and Prepare the Environment
 
 First install **Anaconda** if it is not already installed:
 
@@ -14,7 +14,7 @@ Then open **Anaconda Prompt**.
 
 ---
 
-# 2️⃣ Create and Activate a Clean Python 3.11 Environment
+# 2 Create and Activate a Clean Python 3.11 Environment
 
 Creating a dedicated environment avoids dependency conflicts with other Python installations.
 
@@ -28,7 +28,7 @@ conda activate hogdb311
 
 ---
 
-# 3️⃣ Install Jupyter Notebook and Useful Tools
+# 3️ Install Jupyter Notebook and Useful Tools
 
 ```bash
 # Install Jupyter Notebook
@@ -41,9 +41,9 @@ conda install -y notebook
 pip install ipykernel
 ```
 
----
 
-# 4️⃣ Clone the Official HO-GDB Repository
+
+# 4️ Clone the Official HO-GDB Repository
 
 Clone the original repository from GitHub:
 
@@ -54,9 +54,9 @@ git clone https://github.com/spcl/HO-GDB.git
 Repository link:  
 🔗 https://github.com/spcl/HO-GDB
 
----
 
-# 5️⃣ Fix the Configuration File (Important)
+
+# 5️ Fix the Configuration File (Important)
 
 Replace the file:
 
@@ -79,9 +79,9 @@ The original configuration file may contain **dependency version conflicts** bet
 
 Using the corrected file ensures a **clean and compatible installation**.
 
----
 
-# 6️⃣ Move to the Cloned Repository
+
+# 6️ Move to the Cloned Repository
 
 ```bash
 cd your\path\HO-GDB
@@ -93,18 +93,18 @@ Example:
 cd C:\Users\yourname\Documents\HO-GDB
 ```
 
----
 
-# 7️⃣ Install HO-GDB and Its Dependencies
+
+# 7️ Install HO-GDB and Its Dependencies
 
 ```bash
 # Standard installation (pip resolves declared dependencies)
 pip install .
 ```
 
----
 
-# 8️⃣ Add the Environment as a Jupyter Kernel (Recommended)
+
+# 8️ Add the Environment as a Jupyter Kernel (Recommended)
 
 This allows Jupyter to run notebooks with the **HO-GDB Python environment**.
 
@@ -114,9 +114,9 @@ python -m ipykernel install --user --name hogdb311 --display-name "Python 3.11 (
 
 After this step, **Python 3.11 (HO-GDB)** will appear in the list of available kernels in Jupyter.
 
----
 
-# 9️⃣ Ensure the Dataset is Available
+
+# 9️ Ensure the Dataset is Available
 
 Verify that the **CSV files** are located in the following directory:
 
@@ -138,7 +138,7 @@ HOGDB_Neo4j
 
 ---
 
-# 🔟 Start Neo4j
+# 10 Start Neo4j
 
 Before running the import notebook:
 
@@ -150,7 +150,7 @@ Before running the import notebook:
 
 ---
 
-# 1️⃣1️⃣ Launch Jupyter Notebook
+# 11 Launch Jupyter Notebook
 
 Navigate to the main project directory:
 
@@ -166,23 +166,16 @@ jupyter notebook
 
 ---
 
-# 1️⃣2️⃣ Run the Import Notebook
+# 12 Run the Import Notebook
 
 Open and execute the notebook:
-
-```
-importDataViaHOGDB.ipynb
-```
-
-📄 Notebook location:
 
 ```
 HOGDB_Neo4j/importDataViaHOGDB.ipynb
 ```
 
----
 
-# 📥 What the Notebook Does
+# What the Notebook Does
 
 The notebook:
 
@@ -194,7 +187,7 @@ The notebook:
 ⚠️ **Important:**  
 The import script **automatically loads the data into the currently running Neo4j database**.
 
----
+
 
 #  Final Project Structure (Example)
 
@@ -213,9 +206,9 @@ HOGDB_Neo4j
     └── ...
 ```
 
----
 
-✅ After completing these steps, you should be able to run queries available in the file 
+
+After completing these steps, you should be able to run queries available in the file 
 ```
 HOGDB_Neo4j/QueryHOGDB.ipynb
 ```
