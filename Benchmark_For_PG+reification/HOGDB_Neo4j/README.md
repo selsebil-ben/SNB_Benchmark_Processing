@@ -1,78 +1,221 @@
-# Higher-Order Graph Database (HO-GDB)
+#  Installing and Running HO-GDB with Python 3.11
 
-<p align="center">
-  <img src="paper/pics/system_architecture.svg" width="80%">
-</p>
+This guide explains how to install **HO-GDB** using a clean **Python 3.11** environment with **Anaconda**, and how to run the data import notebook that loads the dataset into **Neo4j** so you will be able to query the HO-GBD graph.
 
-This is the official implementation of [Higher-Order Graph Databases](https://arxiv.org/abs/2506.19661).
+---
 
-This framework implements a higher-order (HO) graph database (GDB) that uses
-lifting and lowering paradigms to seamlessly extend traditional GDBs with
-higher-order interactions. The framework is a lightweight, modular, and
-parallelizable prototype that offers native support for hypergraphs,
-node-tuples, subgraphs, and other HO structures under a unified API. Our work
-generalizes both ACID-compliant and eventually consistent systems.
+# 1️⃣ Install Anaconda and Prepare the Environment
 
+First install **Anaconda** if it is not already installed:
 
-## Setup Guide
+🔗 https://www.anaconda.com/download
 
-In order to use this framework, you need to have a working installation of Python 3.9 or newer.
+Then open **Anaconda Prompt**.
 
+---
 
-### Installing HO-GDB
+# 2️⃣ Create and Activate a Clean Python 3.11 Environment
 
-Before executing the installation process, please make sure to activate your Python environment (if any) beforehand.
+Creating a dedicated environment avoids dependency conflicts with other Python installations.
+
+```bash
+# Create a new conda environment with Python 3.11
+conda create -n hogdb311 python=3.11 -y
+
+# Activate the environment
+conda activate hogdb311
+```
+
+---
+
+# 3️⃣ Install Jupyter Notebook and Useful Tools
+
+```bash
+# Install Jupyter Notebook
+conda install -y notebook
+
+# (Optional) Install JupyterLab instead of Notebook
+# conda install -y jupyterlab
+
+# Install IPython kernel support
+pip install ipykernel
+```
+
+---
+
+# 4️⃣ Clone the Official HO-GDB Repository
+
+Clone the original repository from GitHub:
+
 ```bash
 git clone https://github.com/spcl/HO-GDB.git
-cd HO-GDB
+```
+
+Repository link:  
+🔗 https://github.com/spcl/HO-GDB
+
+---
+
+# 5️⃣ Fix the Configuration File (Important)
+
+Replace the file:
+
+```
+HO-GDB/pyproject.toml
+```
+
+with the **custom `pyproject.toml`** provided in the current project directory:
+
+```
+HOGDB_Neo4j/pyproject.toml
+```
+
+### ⚠️ Why this step is necessary
+
+The original configuration file may contain **dependency version conflicts** between:
+
+- **Python 3.11**
+- some **HO-GDB dependencies**
+
+Using the corrected file ensures a **clean and compatible installation**.
+
+---
+
+# 6️⃣ Move to the Cloned Repository
+
+```bash
+cd your\path\HO-GDB
+```
+
+Example:
+
+```bash
+cd C:\Users\yourname\Documents\HO-GDB
+```
+
+---
+
+# 7️⃣ Install HO-GDB and Its Dependencies
+
+```bash
+# Standard installation (pip resolves declared dependencies)
 pip install .
 ```
-Please note that the Python packages `hypernetx`, `networkx`, `torch`, `torch_geometric` and `rdkit` are only necessary to run the benchmarks, but not for the framework itself.
 
+---
 
-### Installing Neo4j
+# 8️⃣ Add the Environment as a Jupyter Kernel (Recommended)
 
-Please refer to the [Neo4j installation manual](https://neo4j.com/docs/operations-manual/current/installation/). Choose one of the following options:
+This allows Jupyter to run notebooks with the **HO-GDB Python environment**.
 
-* Download Neo4j and extract, start with
 ```bash
-bin/neo4j start
+python -m ipykernel install --user --name hogdb311 --display-name "Python 3.11 (HO-GDB)"
 ```
-* Run Neo4j using the official Docker image.
-* Connect to an AuraDB instance. Make sure to note your username, password, and URL.
 
-You should update the file [HOGDB/.env](HOGDB/.env) according to your configuration and include the necessary credentials or pass these parameters as part of `db_params` in your code.
-You should make sure to allocate sufficient memory for the Neo4j server.
-We used the Neo4j 5.26.5 Community Edition during our evaluation of HO-GDB.
+After this step, **Python 3.11 (HO-GDB)** will appear in the list of available kernels in Jupyter.
 
+---
 
-## Quick Start
+# 9️⃣ Ensure the Dataset is Available
 
-Please make sure that you installed Neo4j and setup the configuration, so that HO-GDB is able to access the Neo4j database.
-While we currently only support Neo4j as a graph database backend, we provide an abstract Database class together with abstract classes for database sessions and transactions that serve as an API to integrate other graph databases.
-These abstract classes can be found in the file [HOGDB/db/db.py](HOGDB/db/db.py).
+Verify that the **CSV files** are located in the following directory:
 
-Once a Neo4j server is running and HO-GDB was installed, you can directly start using HO-GDB.
-We provide a simple example of a higher-order graph with a few nodes and a node-tuple in the [examples](examples) directory.
-If you are looking for code with a higher complexity, please take a look at the [benchmark](benchmark) directory.
+```
+HOGDB_Neo4j/data/
+```
 
-## Datasets and Benchmarks
+Example structure:
 
-We discuss the used datasets (ZINC20 and MAG-10 in particular) as well as our benchmark code in [benchmark/README.md](benchmark/README.md).
+```
+HOGDB_Neo4j
+│
+├── data
+│   ├── person.csv
+│   ├── comment.csv
+│   ├── place.csv
+│   └── ...
+```
 
-## Citations
+---
 
-If you find this repository valuable, please give it a star!
-Got any questions or feedback? Feel free to reach out and open an issue.
-Using this in your work? Please reference us using the provided citation:
+# 🔟 Start Neo4j
 
-```bibtex
-@misc{besta2025higher,
-  title = {{Higher-Order Graph Databases}},
-  author = {Besta, Maciej and Chandran, Shriram and Cudak, Jakub and Iff, Patrick and Copik, Marcin and Gerstenberger, Robert and Szydlo, Tomasz and M\"{u}ller, J\"{u}rgen and Hoefler, Torsten},
-  year = 2025,
-  month = Jun,
-  eprinttype = {arXiv},
-  eprint = {2406.19661}
-}
+Before running the import notebook:
+
+1. Open **Neo4j Desktop**.
+2. **Create a new Graph Database**.
+3. **Start the database server**.
+
+⚠️ The database **must be running**, otherwise the import script will not be able to connect.
+
+---
+
+# 1️⃣1️⃣ Launch Jupyter Notebook
+
+Navigate to the main project directory:
+
+```
+HOGDB_Neo4j
+```
+
+Then start Jupyter:
+
+```bash
+jupyter notebook
+```
+
+---
+
+# 1️⃣2️⃣ Run the Import Notebook
+
+Open and execute the notebook:
+
+```
+importDataViaHOGDB.ipynb
+```
+
+📄 Notebook location:
+
+```
+HOGDB_Neo4j/importDataViaHOGDB.ipynb
+```
+
+---
+
+# 📥 What the Notebook Does
+
+The notebook:
+
+- Connects to the **active Neo4j database**
+- Uses **HO-GDB APIs**
+- Imports the **CSV dataset**
+- Builds the **higher-order graph structures**
+
+⚠️ **Important:**  
+The import script **automatically loads the data into the currently running Neo4j database**.
+
+---
+
+#  Final Project Structure (Example)
+
+```
+HOGDB_Neo4j
+│
+├── data
+│   ├── *.csv
+│
+├── importDataViaHOGDB.ipynb
+│
+├── pyproject.toml   (corrected configuration file)
+│
+└── HO-GDB
+    ├── hogdb
+    └── ...
+```
+
+---
+
+✅ After completing these steps, you should be able to run queries available in the file 
+```
+HOGDB_Neo4j/QueryHOGDB.ipynb
 ```
