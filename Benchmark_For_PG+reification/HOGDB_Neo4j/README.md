@@ -196,10 +196,12 @@ HOGDB_Neo4j
 │
 ├── data
 │   ├── *.csv
-│
+c
 ├── importDataViaHOGDB.ipynb
 │
 ├── pyproject.toml   (corrected configuration file)
+│ 
+├── QueryHOGDB.ipynb
 │
 └── HO-GDB
     ├── hogdb
